@@ -1,2 +1,2 @@
-# Rich_Text_Editor_C_Sharp
+# Rich Text Editor C#
  Basic rich text editor based on windows form.
