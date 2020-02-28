@@ -15,7 +15,7 @@ namespace C_Sharp_rich_text_editor
     public partial class FrmMain : Form
     {
         MemoryStream userinput = new MemoryStream();
-
+        string DocName;
         public FrmMain()
         {
             InitializeComponent();
@@ -24,7 +24,7 @@ namespace C_Sharp_rich_text_editor
 
         private void FillFontNames()
         {
-            
+
         }
 
         /// <summary>
@@ -77,6 +77,17 @@ namespace C_Sharp_rich_text_editor
                 MainText.SelectionFont = new Font(font_name, font_size, FontStyle.Underline);
         }
 
+        private void SetStrikeout()
+        {
+            string font_name = MainText.SelectionFont.Name;
+            float font_size = MainText.SelectionFont.Size;
+            bool isStrikeout = MainText.SelectionFont.Strikeout;
+            if (isStrikeout)
+                MainText.SelectionFont = new Font(font_name, font_size, FontStyle.Regular);
+            else
+                MainText.SelectionFont = new Font(font_name, font_size, FontStyle.Strikeout);
+        }
+
         private void btnBold_Click(object sender, EventArgs e)
         {
             SetBold();
@@ -116,9 +127,11 @@ namespace C_Sharp_rich_text_editor
             openFileDialog1.DefaultExt = "*.rtf";
             openFileDialog1.Filter = "RTF Files|*.rtf";
 
-            if (openFileDialog1.ShowDialog() == DialogResult.OK 
+            if (openFileDialog1.ShowDialog() == DialogResult.OK
                 && openFileDialog1.FileName.Length > 0)
             {
+                DocName = openFileDialog1.FileName;
+                Text = "My notes - " + DocName;
                 MainText.LoadFile(openFileDialog1.FileName, RichTextBoxStreamType.RichText);
             }
         }
@@ -145,21 +158,23 @@ namespace C_Sharp_rich_text_editor
 
         private void SaveFile()
         {
-            if (!string.IsNullOrEmpty(MainText.Text))
+
+            saveFileDialog1.DefaultExt = "*.rtf";
+            saveFileDialog1.Filter = "RTF Files|*.rtf";
+            if(DocName == null)
             {
-                DialogResult dr = MessageBox.Show("Do you wanto to save this file?", "Save file",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if(dr == DialogResult.Yes)
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK
+                && saveFileDialog1.FileName.Length > 0)
                 {
-                    saveFileDialog1.DefaultExt = "*.rtf";
-                    saveFileDialog1.Filter = "RTF Files|*.rtf";
-                    if (saveFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK
-                        && saveFileDialog1.FileName.Length > 0)
-                    {
-                        MainText.SaveFile(saveFileDialog1.FileName, RichTextBoxStreamType.RichText);
-                    }
+                    MainText.SaveFile(saveFileDialog1.FileName, RichTextBoxStreamType.RichText);
                 }
             }
+            else
+            {
+                Text = "My notes - " + DocName;
+                MainText.SaveFile(DocName, RichTextBoxStreamType.RichText);
+            }
+            
         }
 
         private void btnSaveFile_Click(object sender, EventArgs e)
@@ -169,7 +184,17 @@ namespace C_Sharp_rich_text_editor
 
         private void NewFile()
         {
-            SaveFile();
+            if (!string.IsNullOrEmpty(MainText.Text))
+            {
+                DialogResult dr = MessageBox.Show("Do you wanto to save this file?", "Save file",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.Yes)
+                {
+                    SaveFile();
+                }
+            }
+            Text = "My notes";
+            DocName = null;
             MainText.Clear();
             MainText.Focus();
         }
@@ -199,7 +224,7 @@ namespace C_Sharp_rich_text_editor
             SaveFile();
             DialogResult dr = MessageBox.Show("", "",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if(dr == DialogResult.Yes)
+            if (dr == DialogResult.Yes)
             {
                 Close();
             }
@@ -254,7 +279,7 @@ namespace C_Sharp_rich_text_editor
         {
             About about = new About();
             about.ShowDialog();
-            if(about.DialogResult == DialogResult.OK)
+            if (about.DialogResult == DialogResult.OK)
             {
                 about.Dispose();
             }
@@ -263,7 +288,7 @@ namespace C_Sharp_rich_text_editor
         private void AddImage()
         {
             openFileDialog1.Filter = "Images (*.jpg)|*.jpg |Images (*.png)|*.png";
-            if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string Path = openFileDialog1.FileName;
                 Clipboard.SetImage(Image.FromFile(Path));
@@ -280,6 +305,20 @@ namespace C_Sharp_rich_text_editor
         {
             AddImage();
         }
-        
+
+        private void printDocument1_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            Font currentFont = new Font(MainText.Font.Name, MainText.Font.Size, MainText.Font.Style);
+            e.Graphics.DrawString(MainText.Text, currentFont, Brushes.Black, new PointF(200, 200));
+        }
+
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            if (printPreviewDialog1.ShowDialog() == DialogResult.OK)
+            {
+                printDocument1.Print();
+            }
+        }
+
     }
 }

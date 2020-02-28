@@ -67,11 +67,13 @@
             this.btnRightAlign = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.btnAddImage = new System.Windows.Forms.ToolStripButton();
+            this.btnPrint = new System.Windows.Forms.ToolStripButton();
             this.MainText = new System.Windows.Forms.RichTextBox();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.printDialog1 = new System.Windows.Forms.PrintDialog();
+            this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
+            this.printDocument1 = new System.Drawing.Printing.PrintDocument();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -167,7 +169,7 @@
             // 
             this.mnuBold.Image = global::C_Sharp_rich_text_editor.Properties.Resources.bold_467935;
             this.mnuBold.Name = "mnuBold";
-            this.mnuBold.Size = new System.Drawing.Size(180, 22);
+            this.mnuBold.Size = new System.Drawing.Size(151, 22);
             this.mnuBold.Text = "&Bold";
             this.mnuBold.Click += new System.EventHandler(this.mnuBold_Click);
             // 
@@ -175,7 +177,7 @@
             // 
             this.mnuItalic.Image = global::C_Sharp_rich_text_editor.Properties.Resources.italic_icon;
             this.mnuItalic.Name = "mnuItalic";
-            this.mnuItalic.Size = new System.Drawing.Size(180, 22);
+            this.mnuItalic.Size = new System.Drawing.Size(151, 22);
             this.mnuItalic.Text = "&Italic";
             this.mnuItalic.Click += new System.EventHandler(this.mnuItalic_Click);
             // 
@@ -183,7 +185,7 @@
             // 
             this.mnuUnderline.Image = global::C_Sharp_rich_text_editor.Properties.Resources.underline_icon;
             this.mnuUnderline.Name = "mnuUnderline";
-            this.mnuUnderline.Size = new System.Drawing.Size(180, 22);
+            this.mnuUnderline.Size = new System.Drawing.Size(151, 22);
             this.mnuUnderline.Text = "&Underline";
             this.mnuUnderline.Click += new System.EventHandler(this.mnuUnderline_Click);
             // 
@@ -191,7 +193,7 @@
             // 
             this.mnuChangeFont.Image = global::C_Sharp_rich_text_editor.Properties.Resources.font_icon;
             this.mnuChangeFont.Name = "mnuChangeFont";
-            this.mnuChangeFont.Size = new System.Drawing.Size(180, 22);
+            this.mnuChangeFont.Size = new System.Drawing.Size(151, 22);
             this.mnuChangeFont.Text = "Change &font";
             this.mnuChangeFont.Click += new System.EventHandler(this.mnuChangeFont_Click);
             // 
@@ -202,7 +204,7 @@
             this.mnuCenterAlign,
             this.mnuRightAlign});
             this.textAlignToolStripMenuItem.Name = "textAlignToolStripMenuItem";
-            this.textAlignToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.textAlignToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.textAlignToolStripMenuItem.Text = "Text align";
             // 
             // mnuLeftAlign
@@ -233,7 +235,7 @@
             // 
             this.mnuAddImage.Image = global::C_Sharp_rich_text_editor.Properties.Resources.insert_image_pic_icon;
             this.mnuAddImage.Name = "mnuAddImage";
-            this.mnuAddImage.Size = new System.Drawing.Size(180, 22);
+            this.mnuAddImage.Size = new System.Drawing.Size(151, 22);
             this.mnuAddImage.Text = "Add image";
             this.mnuAddImage.Click += new System.EventHandler(this.mnuAddImage_Click);
             // 
@@ -248,7 +250,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -276,7 +278,8 @@
             this.btnCenterAlign,
             this.btnRightAlign,
             this.toolStripSeparator4,
-            this.btnAddImage});
+            this.btnAddImage,
+            this.btnPrint});
             this.toolStrip1.Location = new System.Drawing.Point(0, 27);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1067, 25);
@@ -408,6 +411,16 @@
             this.btnAddImage.Text = "toolStripButton1";
             this.btnAddImage.Click += new System.EventHandler(this.btnAddImage_Click);
             // 
+            // btnPrint
+            // 
+            this.btnPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnPrint.Image = global::C_Sharp_rich_text_editor.Properties.Resources.printer_print_printing_icon;
+            this.btnPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnPrint.Name = "btnPrint";
+            this.btnPrint.Size = new System.Drawing.Size(23, 22);
+            this.btnPrint.Text = "toolStripButton1";
+            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
+            // 
             // MainText
             // 
             this.MainText.AutoWordSelection = true;
@@ -424,9 +437,20 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // printDialog1
+            // printPreviewDialog1
             // 
-            this.printDialog1.UseEXDialog = true;
+            this.printPreviewDialog1.AutoScrollMargin = new System.Drawing.Size(0, 0);
+            this.printPreviewDialog1.AutoScrollMinSize = new System.Drawing.Size(0, 0);
+            this.printPreviewDialog1.ClientSize = new System.Drawing.Size(400, 300);
+            this.printPreviewDialog1.Document = this.printDocument1;
+            this.printPreviewDialog1.Enabled = true;
+            this.printPreviewDialog1.Icon = ((System.Drawing.Icon)(resources.GetObject("printPreviewDialog1.Icon")));
+            this.printPreviewDialog1.Name = "printPreviewDialog1";
+            this.printPreviewDialog1.Visible = false;
+            // 
+            // printDocument1
+            // 
+            this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
             // 
             // FrmMain
             // 
@@ -496,6 +520,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem mnuAddImage;
         private System.Windows.Forms.ToolStripButton btnAddImage;
-        private System.Windows.Forms.PrintDialog printDialog1;
+        private System.Windows.Forms.ToolStripButton btnPrint;
+        private System.Windows.Forms.PrintPreviewDialog printPreviewDialog1;
+        private System.Drawing.Printing.PrintDocument printDocument1;
     }
 }
